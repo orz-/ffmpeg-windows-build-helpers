@@ -1245,7 +1245,7 @@ build_ffmpeg() {
   rm -rf ${output_dir}
   do_git_checkout $git_url ${output_dir}
   cd $output_dir
-  git checkout -b ${REPO} origin/${REPO}
+  git checkout ${REPO}
   
   if [ "$bits_target" = "32" ]; then
    local arch=x86

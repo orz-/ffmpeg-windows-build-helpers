@@ -1242,6 +1242,7 @@ build_ffmpeg() {
     extra_configure_opts="--enable-static --disable-shared $extra_configure_opts --prefix=$mingw_w64_x86_64_prefix"
   fi
 
+  rm -rf ${output_dir}
   do_git_checkout $git_url ${output_dir}
   cd $output_dir
   git checkout -b ${REPO} origin/${REPO}

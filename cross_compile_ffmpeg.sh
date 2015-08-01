@@ -1224,7 +1224,7 @@ build_libdecklink() {
 build_ffmpeg() {
   local type=$1
   local shared=$2
-  local git_url="https://github.com/FFmpeg/FFmpeg.git"
+  local git_url="https://github.com/Saccubus/ffmpeg.git"
   local output_dir="ffmpeg_git"
 
   local extra_configure_opts=""
@@ -1244,6 +1244,7 @@ build_ffmpeg() {
 
   do_git_checkout $git_url ${output_dir}
   cd $output_dir
+  git checkout -b ${REPO} origin/${REPO}
   
   if [ "$bits_target" = "32" ]; then
    local arch=x86

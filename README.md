@@ -4,27 +4,40 @@ ffmpeg-windows-build-helpers
 This helper script lets you cross compile a windows 32 or 64 bit version of ffmpeg/mplayer/mp4box.exe, etc.
 including many dependency libraries they use.
 
-To run the script:
+To run the script...
 
-In some type of Linux box (VM or native, or you can create a remote one temporarily, like at digitalocean [1], use it, then destroy it):
+To build in windows (no VM needed, uses the native'ish cygwin, can take 6 hours or more):
 
-download the script (git clone the repo, run it, or do the following in a bash window) $
+     download repository: 
+       zip file: https://github.com/rdp/ffmpeg-windows-build-helpers/archive/master.zip and unzip
+       or clone the repository: c:\> git clone https://github.com/rdp/ffmpeg-windows-build-helpers.git
+     Next run one of the "native_build/build_locally_XXX.bat" file.  The "fast" one is just libx264, fdk aac, and FFmpeg, and takes about 1 hour.
+  
+Or to build it from linux (uses cross compiler, takes 2 hours or so but requires linux box):
 
-```bash
-wget https://raw.github.com/rdp/ffmpeg-windows-build-helpers/master/cross_compile_ffmpeg.sh -O cross_compile_ffmpeg.sh
-chmod u+x cross_compile_ffmpeg.sh
-./cross_compile_ffmpeg.sh
-```
+  In some type of Linux box (VM or native, or you could even create a VM temporarily, ex: digitalocean [1], [use it, then destroy your droplet]):
 
-And follow the prompts.  
-It should end up with a working static ffmpeg.exe within the sandbox directory.
+  download the script (git clone the repo, cd into it, run script, or do the following in a bash prompt) $
 
-It works with 32 or 64 bit (host) Linux, and can produce either/or 32 and 64 bit windows ffmpeg.exe's, with lots of dependencies built in. To build more than just FFmpeg, use command line parameters to the script.
+    ```bash
+    wget https://raw.github.com/rdp/ffmpeg-windows-build-helpers/master/cross_compile_ffmpeg.sh -O cross_compile_ffmpeg.sh
+    chmod u+x cross_compile_ffmpeg.sh
+    ./cross_compile_ffmpeg.sh
+    ```
 
-OS X users, this may help: https://github.com/rdp/ffmpeg-windows-build-helpers/wiki/OS-X
+And for both, answer the prompts.  
+It should end up with a working static ffmpeg.exe within the "sandbox/*/ffmpeg_git" director(ies).
 
-Also NB that it has some command line parameters you can pass it, for instance to speed
-up the building speed of gcc, building a shared build (.dll style) of FFmpeg, etc. 
+Another option is to run quick_cross_compile_ffmpeg_fdk_aac_using_packaged_mingw64.sh
+  The "quick" part being the important part here, this one attempts to /just uses your local distributions
+  mingw-w64 package for the cross compiler, thus speeding up compilation *dramatically*.
+  Ping me if you'd like to see the "main" script use more of this style as well.
+
+OS X users, follow instructions for linux above (it should "just work" no VM needed, cross compiling).
+
+Also NB that it has some command line parameters you can pass it, for instance 
+building a shared FFmpeg build (libavcodec-56.dll style), 
+building mp4box/mplayer/vlc, 10 bit libx264, etc.
 Run it like 
 ./cross_compile_ffmpeg.sh -h 
 to see all the various options available to you.
@@ -56,17 +69,17 @@ NB that using a -march might not significantly improve speed [YMMV], ping me if 
 Feedback welcome roger-projects@googlegroups.com
 
 Related projects (similar to this one...):
+  https://github.com/jb-alvarado/media-autobuild_suite (native'ish windows using msys2)
+  https://github.com/Warblefly/multimediaWin64 (native'ish windows using cygwin)
+  there's also the "fast" option see above, within this project
 
-https://github.com/jb-alvarado/media-autobuild_suite (native'ish windows using msys2)
-https://github.com/Warblefly/multimediaWin64 (native'ish windows using cygwin)
+Related projects (that do cross compiling with dependency libraries):
 
-ping me if you want this script ported to more native as well :)
+  vlc has a "contribs" building (cross compiling) system for its dependencies: https://wiki.videolan.org/Win32Compile/
+    (NB this script has an option to compile VLC as well, though currently it makes huge .exe files :)
+  mxe "m cross environment" https://github.com/mxe/mxe is a library for cross compiling many things, including FFmpeg I believe.
 
-vlc has a "contribs" building (cross compiling) system for its dependencies: https://wiki.videolan.org/Win32Compile/
-
-mxe "m cross environment" https://github.com/mxe/mxe is a library for cross compiling many things.
-
-https://github.com/qyot27/mpv/blob/extra-new/DOCS/crosscompile-mingw-tedious.txt lists lots of instructions
-
-[1] if you use a 512MB RAM droplet, make sure to add some extra swap space: https://www.digitalocean.com/community/tutorials/how-to-add-swap-on-ubuntu-14-04 before starting.  
+[1] if you use a 512MB RAM droplet, make sure to first add some extra swap space: https://www.digitalocean.com/community/tutorials/how-to-add-swap-on-ubuntu-14-04 before starting.  
 Here's my digitalocean referral link in case you want it [$10 credit] https://www.digitalocean.com/?refcode=b3030b559d17
+
+to enable Intel QSV (vista+ compatible only) use option --build-intel-qsv=y
